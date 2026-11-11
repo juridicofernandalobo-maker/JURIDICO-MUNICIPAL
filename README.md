@@ -84,6 +84,38 @@ Principais opções:
 | `--saida PASTA` | `saida` | onde gravar os relatórios |
 | `--workers N` | 16 | consultas simultâneas à API |
 
+## Ver o painel
+
+O sistema não fica no ar como um site: ele gera os relatórios em HTML na pasta `saida/`.
+Para abrir o painel no navegador:
+
+```bash
+python -m juridico_municipal servir
+```
+
+O endereço é `http://localhost:8000/painel.html`. No computador, também dá para abrir o
+arquivo `saida/painel.html` com dois cliques.
+
+### No GitHub Codespaces (VS Code no navegador)
+
+1. No repositório, clique em **Code > Codespaces > Create codespace on main**. A configuração
+   em `.devcontainer/` já instala o necessário.
+2. No terminal do Codespace, gere os relatórios e abra o painel:
+
+```bash
+python -m juridico_municipal buscar --municipios IGUATU
+```
+
+```bash
+python -m juridico_municipal servir
+```
+
+3. Abra a aba **PORTAS** (Ports), localize a porta **8000** ("Painel do radar") e clique no ícone
+   do globo. O próprio comando também mostra o link direto.
+
+> Se aparecer uma tela do **Jupyter pedindo token ou senha**, você abriu a porta errada
+> (8888, do Jupyter). Feche essa tela e use a porta **8000**. O sistema não usa Jupyter.
+
 ## Saídas (pasta `saida/`)
 
 | Arquivo | Conteúdo |

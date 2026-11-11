@@ -106,6 +106,32 @@ def cmd_buscar(args) -> int:
     return 0
 
 
+def cmd_servir(args) -> int:
+    """Abre os relatórios num servidor local (útil no GitHub Codespaces)."""
+    import functools
+    import http.server
+    import os
+
+    pasta = Path(args.saida)
+    if not (pasta / "painel.html").exists():
+        print(f"Não há painel em {pasta}/. Rode primeiro, por exemplo:\n"
+              f"  python -m juridico_municipal buscar --municipios IGUATU", file=sys.stderr)
+        return 2
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(pasta))
+    srv = http.server.ThreadingHTTPServer((args.host, args.porta), handler)
+    print(f"Painel em http://localhost:{args.porta}/painel.html")
+    if os.environ.get("CODESPACE_NAME"):
+        dominio = os.environ.get("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN", "app.github.dev")
+        print(f"No Codespaces: https://{os.environ['CODESPACE_NAME']}-{args.porta}.{dominio}/painel.html")
+        print("(ou aba PORTAS > porta " + str(args.porta) + " > ícone do globo)")
+    print("Ctrl+C para encerrar.")
+    try:
+        srv.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="juridico_municipal",
                                  description="Radar de credores de municípios do Ceará (SIM/TCE-CE)")
@@ -132,7 +158,14 @@ def main(argv=None) -> int:
     b.add_argument("--sem-cache", action="store_true", help="ignorar o cache local")
     b.add_argument("--quieto", action="store_true")
 
+    v = sub.add_parser("servir", help="abre o painel no navegador por um servidor local")
+    v.add_argument("--saida", default="saida", help="pasta dos relatórios (padrão saida)")
+    v.add_argument("--porta", type=int, default=8000, help="porta (padrão 8000)")
+    v.add_argument("--host", default="0.0.0.0", help="endereço (padrão 0.0.0.0)")
+
     args = ap.parse_args(argv)
     if args.cmd == "municipios":
         return cmd_municipios(args)
+    if args.cmd == "servir":
+        return cmd_servir(args)
     return cmd_buscar(args)
