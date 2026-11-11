@@ -356,6 +356,9 @@ def gerar_tudo(saida: Path, credores: list[Credor], municipios: list[dict], c: C
         dossies[cr.chave] = rel
     gravar_painel(saida / "painel.html", credores, municipios, c, dossies)
     arquivos["painel.html"] = saida / "painel.html"
+    (saida / "index.html").write_text(
+        "<!doctype html><meta charset='utf-8'><meta http-equiv='refresh' content='0; url=painel.html'>"
+        "<a href='painel.html'>Abrir o painel</a>", encoding="utf-8")
     (saida / "criterios.json").write_text(json.dumps({
         "data_base": c.data_base.isoformat(), "meses_minimo": c.meses_minimo,
         "data_limite": c.data_limite.isoformat(), "valor_minimo": c.valor_minimo,

@@ -116,6 +116,21 @@ python -m juridico_municipal servir
 > Se aparecer uma tela do **Jupyter pedindo token ou senha**, você abriu a porta errada
 > (8888, do Jupyter). Feche essa tela e use a porta **8000**. O sistema não usa Jupyter.
 
+> Se aparecer **401 Unauthorized** (página em branco), o túnel do GitHub não reconheceu o
+> seu login. A porta é privada e só abre para a conta dona do Codespace. Tente, nesta ordem:
+>
+> 1. Abra pelo ícone do globo na aba **PORTAS**, e não colando o link. Esse clique faz a
+>    autenticação.
+> 2. Use uma janela normal do navegador, não anônima, logada na mesma conta do GitHub. Em
+>    Configurações > Privacidade > Cookies de terceiros, permita os sites
+>    `[*.]github.dev` e `[*.]app.github.dev`.
+> 3. Abra dentro do próprio VS Code: `Ctrl+Shift+P` > **Simple Browser: Show** e cole
+>    `http://localhost:8000`.
+> 4. Sem servidor: clique com o botão direito em `saida/painel.html` > **Download** e abra o
+>    arquivo no computador. Para os dossiês, baixe a pasta `saida` inteira.
+>
+> Evite tornar a porta pública: qualquer pessoa com o link veria o painel.
+
 ## Saídas (pasta `saida/`)
 
 | Arquivo | Conteúdo |
